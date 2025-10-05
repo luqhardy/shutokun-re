@@ -37,6 +37,20 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
         }}
       />
+           <Tabs.Screen
+        name="custom-mode"
+        options={{
+          title: 'Custom Mode',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="vocab-editor"
+        options={{
+          title: 'Vocab Editor',
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+        }}
+      />
     </Tabs>
   );
 }
