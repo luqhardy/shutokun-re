@@ -1,4 +1,5 @@
 import React from 'react';
+import { Image } from 'expo-image';
 import {
   SafeAreaView,
   View,
@@ -7,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import { useRouter } from 'expo-router';
 
 // Define the type for the props of the MenuButton component
 type MenuButtonProps = {
@@ -25,8 +27,13 @@ const MenuButton: React.FC<MenuButtonProps> = ({
   emoji,
   isNew = false,
 }) => {
+  const router = useRouter();
+
   return (
-    <TouchableOpacity style={[styles.menuButton, { backgroundColor: color }]}>
+    <TouchableOpacity
+      style={[styles.menuButton, { backgroundColor: color }]}
+      onPress={() => router.replace(`/${title.toLowerCase().replace(/ /g, '-')}`)}
+    >
       <View>
         <Text style={styles.menuButtonTitle}>{title}</Text>
         {subtitle && <Text style={styles.menuButtonSubtitle}>{subtitle}</Text>}
@@ -42,14 +49,23 @@ const MenuButton: React.FC<MenuButtonProps> = ({
 };
 
 const LanguageAppUI: React.FC = () => {
+  const router = useRouter();
+
+  const menuItems = [
+    { title: 'JLPT Study', emoji: '📚', color: '#28a745', route: '/jlpt-study' },
+    { title: 'Hiragana', emoji: '🎛️', color: '#17a2b8', route: '/kana-quiz' },
+    { title: 'Custom Mode (Beta)', emoji: '✍️', color: '#007bff', route: '/custom-mode' },
+    { title: 'Vocab Editor (Beta)', emoji: '✏️', color: '#ffc107', route: '/vocab-editor' },
+    { title: 'Japanese Sentence Analyser', emoji: '🔍', color: '#6f42c1', route: '/bunsekikun', isNew: true },
+  ];
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
         {/* ## Header ## */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.logoText}>しゅとくん</Text>
-            <Text style={styles.logoSubtext}>SHUTOKUN</Text>
+            <Image source={require('../../assets/images/logo.png')} style={{ width: 150, height: 50 }} contentFit="contain" />
           </View>
           <TouchableOpacity style={styles.signInButton}>
             <Text style={styles.signInButtonText}>Sign in</Text>
@@ -60,39 +76,17 @@ const LanguageAppUI: React.FC = () => {
         <ScrollView contentContainerStyle={styles.mainContent}>
           <Text style={styles.title}>Sign in to sync your progress</Text>
 
-          <MenuButton
-            color="#28a745"
-            title="JLPT Study"
-            emoji="📚"
-          />
-          <MenuButton
-            color="#17a2b8"
-            title="Hiragana"
-            subtitle="& Katakana"
-            emoji="🎛️"
-          />
-          <MenuButton
-            color="#007bff"
-            title="Custom Mode (Beta)"
-            emoji="✍️"
-          />
-          <MenuButton
-            color="#ffc107"
-            title="Vocab Editor (Beta)"
-            emoji="✏️"
-          />
-          <MenuButton
-            color="#6f42c1"
-            title="Japanese Sentence Analyser"
-            emoji="🔍"
-            isNew={true}
-          />
+          {menuItems.map(item => (
+            <TouchableOpacity
+              key={item.title}
+              style={[styles.button, { backgroundColor: item.color }]}
+              onPress={() => router.push(item.route as any)}
+            >
+              <Text style={styles.buttonText}>{item.emoji} {item.title}</Text>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
         
-        {/* ## Floating Action Button ## */}
-        <TouchableOpacity style={styles.floatingButton}>
-             <Text style={styles.floatingButtonIcon}>🌙</Text>
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -193,7 +187,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 'bold',
   },
-    // Floating Button Styles
+  // Floating Button Styles
   floatingButton: {
     position: 'absolute',
     bottom: 30,
@@ -212,6 +206,18 @@ const styles = StyleSheet.create({
   },
   floatingButtonIcon: {
       fontSize: 24,
+  },
+  button: {
+    width: '90%',
+    padding: 18,
+    borderRadius: 12,
+    marginVertical: 10,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
   }
 });
 

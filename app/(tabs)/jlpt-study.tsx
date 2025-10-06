@@ -1,4 +1,5 @@
 import React from 'react';
+import { Image } from 'expo-image';
 import {
   SafeAreaView,
   View,
@@ -8,16 +9,14 @@ import {
   ScrollView,
 } from 'react-native';
 
-// Define the type for the props of the MenuButton component
 type MenuButtonProps = {
   color: string;
   title: string;
-  subtitle?: string; // Optional prop
+  subtitle?: string;
   emoji: string;
-  isNew?: boolean; // Optional prop
+  isNew?: boolean;
 };
 
-// Reusable component for the main menu buttons
 const MenuButton: React.FC<MenuButtonProps> = ({
   color,
   title,
@@ -48,8 +47,7 @@ const LanguageAppUI: React.FC = () => {
         {/* ## Header ## */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.logoText}>しゅとくん</Text>
-            <Text style={styles.logoSubtext}>SHUTOKUN</Text>
+            <Image source={require('../../assets/images/logo.png')} style={{ width: 150, height: 50 }} contentFit="contain" />
           </View>
           <TouchableOpacity style={styles.signInButton}>
             <Text style={styles.signInButtonText}>Sign in</Text>
@@ -61,38 +59,34 @@ const LanguageAppUI: React.FC = () => {
           <Text style={styles.title}>Sign in to sync your progress</Text>
 
           <MenuButton
-            color="#28a745"
-            title="JLPT Study"
-            emoji="📚"
+            color="#ff0000ff"
+            title="JLPT N1"
+            subtitle="Hardest Level"
+            emoji=""
           />
           <MenuButton
-            color="#17a2b8"
-            title="Hiragana"
-            subtitle="& Katakana"
-            emoji="🎛️"
+            color="#ff9900ff"
+            title="JLPT N2"
+            emoji=""
           />
           <MenuButton
-            color="#007bff"
-            title="Custom Mode (Beta)"
-            emoji="✍️"
+            color="#e1ff00ff"
+            title="JLPT N3"
+            emoji=""
           />
           <MenuButton
-            color="#ffc107"
-            title="Vocab Editor (Beta)"
-            emoji="✏️"
+            color="#078bffff"
+            title="JLPT N4"
+            emoji=""
           />
           <MenuButton
-            color="#6f42c1"
-            title="Japanese Sentence Analyser"
-            emoji="🔍"
-            isNew={true}
+            color="#15c03dff"
+            title="JLPT N5"
+            subtitle="Easiest Level"
+            emoji=""
           />
         </ScrollView>
         
-        {/* ## Floating Action Button ## */}
-        <TouchableOpacity style={styles.floatingButton}>
-             <Text style={styles.floatingButtonIcon}>🌙</Text>
-        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
