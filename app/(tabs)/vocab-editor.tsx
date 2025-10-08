@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'expo-router';
 import {
   SafeAreaView,
   View,
@@ -18,9 +19,13 @@ const vocabEditor: React.FC = () => {
             <Text style={styles.logoText}>Test</Text>
             <Text style={styles.logoSubtext}>TEST</Text>
           </View>
-          <TouchableOpacity style={styles.signInButton}>
-            <Text style={styles.signInButtonText}>Sign in</Text>
-          </TouchableOpacity>
+                    <TouchableOpacity style={styles.signInButton}>
+                      <Link href="/signin-modal" asChild>
+                        <TouchableOpacity style={styles.signInButton}>
+                          <Text style={styles.signInButtonText}>Sign in</Text>
+                        </TouchableOpacity>
+                      </Link>
+                    </TouchableOpacity>
         </View>
 
         {/* ## Main Content ## */}

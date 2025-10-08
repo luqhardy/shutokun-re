@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'expo-router';
 import { Image } from 'expo-image';
 import {
   SafeAreaView,
@@ -32,7 +33,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({
   return (
     <TouchableOpacity
       style={[styles.menuButton, { backgroundColor: color }]}
-      onPress={() => router.replace(`/${title.toLowerCase().replace(/ /g, '-')}`)}
+      onPress={() => router.replace(menuItems.find(item => item.title === title)?.route ?? '/')}
     >
       <View>
         <Text style={styles.menuButtonTitle}>{title}</Text>
@@ -52,11 +53,11 @@ const LanguageAppUI: React.FC = () => {
   const router = useRouter();
 
   const menuItems = [
-    { title: 'JLPT Study', emoji: '📚', color: '#28a745', route: '/jlpt-study' },
-    { title: 'Hiragana', emoji: '🎛️', color: '#17a2b8', route: '/kana-quiz' },
-    { title: 'Custom Mode (Beta)', emoji: '✍️', color: '#007bff', route: '/custom-mode' },
-    { title: 'Vocab Editor (Beta)', emoji: '✏️', color: '#ffc107', route: '/vocab-editor' },
-    { title: 'Japanese Sentence Analyser', emoji: '🔍', color: '#6f42c1', route: '/bunsekikun', isNew: true },
+    { title: 'JLPT Study', emoji: '', color: '#28a745', route: '/jlpt-study' },
+    { title: 'Hiragana', emoji: '', color: '#17a2b8', route: '/kana-quiz' },
+    { title: 'Custom Mode (Beta)', emoji: '', color: '#007bff', route: '/custom-mode' },
+    { title: 'Vocab Editor (Beta)', emoji: '', color: '#ffc107', route: '/vocab-editor' },
+    { title: 'Japanese Sentence Analyser', emoji: '', color: '#6f42c1', route: '/bunsekikun', isNew: true },
   ];
 
   return (
@@ -68,11 +69,15 @@ const LanguageAppUI: React.FC = () => {
             <Image source={require('../../assets/images/logo.png')} style={{ width: 150, height: 50 }} contentFit="contain" />
           </View>
           <TouchableOpacity style={styles.signInButton}>
-            <Text style={styles.signInButtonText}>Sign in</Text>
+            <Link href="/signin-modal" asChild>
+              <TouchableOpacity style={styles.signInButton}>
+                <Text style={styles.signInButtonText}>Sign in</Text>
+              </TouchableOpacity>
+            </Link>
           </TouchableOpacity>
         </View>
 
-        {/* ## Main Content ## */}
+  {/* ## Main Content ## */}
         <ScrollView contentContainerStyle={styles.mainContent}>
           <Text style={styles.title}>Sign in to sync your progress</Text>
 
@@ -122,8 +127,8 @@ const styles = StyleSheet.create({
   },
   signInButton: {
     backgroundColor: '#343A40',
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    paddingVertical: 4,
+    paddingHorizontal: 10,
     borderRadius: 8,
   },
   signInButtonText: {

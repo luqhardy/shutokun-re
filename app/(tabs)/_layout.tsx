@@ -19,7 +19,6 @@ export default function TabLayout() {
         headerTitleAlign: 'center',
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
-        // Remove custom tabBarButton and tabBarBackground for native look
       }}>
       <Tabs.Screen
         name="index"

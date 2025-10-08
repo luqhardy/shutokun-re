@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'expo-router';
 import { Image } from 'expo-image';
 import {
   SafeAreaView,
@@ -184,9 +185,13 @@ const LanguageAppUI: React.FC = () => {
           <View>
             <Image source={require('../../assets/images/logo.png')} style={{ width: 150, height: 50 }} contentFit="contain" />
           </View>
-          <TouchableOpacity style={styles.signInButton}>
-            <Text style={styles.signInButtonText}>Sign in</Text>
-          </TouchableOpacity>
+                    <TouchableOpacity style={styles.signInButton}>
+                      <Link href="/signin-modal" asChild>
+                        <TouchableOpacity style={styles.signInButton}>
+                          <Text style={styles.signInButtonText}>Sign in</Text>
+                        </TouchableOpacity>
+                      </Link>
+                    </TouchableOpacity>
         </View>
 
         {/* ## Main Content ## */}

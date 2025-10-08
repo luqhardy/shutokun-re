@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'expo-router';
 import { Image } from 'expo-image';
 import {
   SafeAreaView,
@@ -25,7 +26,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({
   isNew = false,
 }) => {
   return (
-    <TouchableOpacity style={[styles.menuButton, { backgroundColor: color }]}>
+    <TouchableOpacity style={[styles.menuButton, { backgroundColor: color }]} onPress={() => {window.location.href = '/srsWindow';}}>
       <View>
         <Text style={styles.menuButtonTitle}>{title}</Text>
         {subtitle && <Text style={styles.menuButtonSubtitle}>{subtitle}</Text>}
@@ -49,9 +50,13 @@ const LanguageAppUI: React.FC = () => {
           <View>
             <Image source={require('../../assets/images/logo.png')} style={{ width: 150, height: 50 }} contentFit="contain" />
           </View>
-          <TouchableOpacity style={styles.signInButton}>
-            <Text style={styles.signInButtonText}>Sign in</Text>
-          </TouchableOpacity>
+                    <TouchableOpacity style={styles.signInButton}>
+                      <Link href="/signin-modal" asChild>
+                        <TouchableOpacity style={styles.signInButton}>
+                          <Text style={styles.signInButtonText}>Sign in</Text>
+                        </TouchableOpacity>
+                      </Link>
+                    </TouchableOpacity>
         </View>
 
         {/* ## Main Content ## */}
@@ -62,7 +67,6 @@ const LanguageAppUI: React.FC = () => {
             color="#ff0000ff"
             title="JLPT N1"
             subtitle="Hardest Level"
-            emoji=""
           />
           <MenuButton
             color="#ff9900ff"
@@ -70,7 +74,7 @@ const LanguageAppUI: React.FC = () => {
             emoji=""
           />
           <MenuButton
-            color="#e1ff00ff"
+            color="#e6f700ff"
             title="JLPT N3"
             emoji=""
           />
