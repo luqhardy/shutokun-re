@@ -74,7 +74,7 @@ const LanguageAppUI: React.FC = () => {
             emoji=""
           />
           <MenuButton
-            color="#e6f700ff"
+            color="#f7ce00ff"
             title="JLPT N3"
             emoji=""
           />

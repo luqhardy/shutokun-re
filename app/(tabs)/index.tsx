@@ -11,16 +11,14 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
-// Define the type for the props of the MenuButton component
 type MenuButtonProps = {
   color: string;
   title: string;
-  subtitle?: string; // Optional prop
+  subtitle?: string; // Optional
   emoji: string;
-  isNew?: boolean; // Optional prop
+  isNew?: boolean; // Optional
 };
 
-// Reusable component for the main menu buttons
 const MenuButton: React.FC<MenuButtonProps> = ({
   color,
   title,
@@ -56,7 +54,7 @@ const LanguageAppUI: React.FC = () => {
     { title: 'JLPT Study', emoji: '', color: '#28a745', route: '/jlpt-study' },
     { title: 'Hiragana', emoji: '', color: '#17a2b8', route: '/kana-quiz' },
     { title: 'Custom Mode (Beta)', emoji: '', color: '#007bff', route: '/custom-mode' },
-    { title: 'Vocab Editor (Beta)', emoji: '', color: '#ffc107', route: '/vocab-editor' },
+    { title: 'Vocab Editor (Beta)', emoji: '', color: '#ffd000ff', route: '/vocab-editor' },
     { title: 'Japanese Sentence Analyser', emoji: '', color: '#6f42c1', route: '/bunsekikun', isNew: true },
   ];
 
@@ -105,7 +103,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  // Header Styles
+
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -136,7 +134,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: 14,
   },
-  // Main Content Styles
+
   mainContent: {
     alignItems: 'center',
     paddingVertical: 40,
@@ -146,7 +144,7 @@ const styles = StyleSheet.create({
     color: '#495057',
     marginBottom: 25,
   },
-  // Menu Button Component Styles
+
   menuButton: {
     width: '85%',
     flexDirection: 'row',
@@ -192,7 +190,7 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 'bold',
   },
-  // Floating Button Styles
+
   floatingButton: {
     position: 'absolute',
     bottom: 30,
