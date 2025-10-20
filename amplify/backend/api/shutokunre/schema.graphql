@@ -1,8 +1,0 @@
-type UserProgress @model @auth(rules: [{ allow: owner }]) {
-  id: ID!
-  term: String!
-  definition: String!
-  level: String!
-  srs_level: Int!
-  next_review_timestamp: Int!
-}
