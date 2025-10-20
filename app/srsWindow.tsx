@@ -3,10 +3,13 @@ import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, SafeAreaVi
 import { useLocalSearchParams, Link } from 'expo-router';
 import { Image } from 'expo-image';
 import { getAllFromDatabase } from '../db/database';
-import { getAllAsync } from '../db/database';
-import { runAsync } from '../db/database';
+import { API, graphqlOperation } from 'aws-amplify';
+import { listUserProgresses } from '../src/graphql/queries';
+import { createUserProgress, updateUserProgress } from '../src/graphql/mutations';
+import { UserProgress } from '../src/API';
 
 type VocabRow = {
+	id?: string;
 	term: string;
 	definition: string;
 	level: string;
@@ -30,22 +33,34 @@ export default function SRSWindow() {
 	useEffect(() => {
 		let mounted = true;
 
-			async function load() {
+		async function load() {
 			setLoading(true);
 			try {
 				const lvl = level ?? 'N5';
-					let rows: any[] = [];
-					const now = Math.floor(Date.now() / 1000);
-					if (itemType === 'kanji') {
-						rows = await getAllFromDatabase<any>(dbName, assetName, 'SELECT character as term, meaning as definition, level, srs_level, next_review_timestamp FROM kanji WHERE (next_review_timestamp <= ? OR srs_level = 0) AND level = ? ORDER BY srs_level, RANDOM() LIMIT 20', [now, lvl]);
-					} else {
-						rows = await getAllFromDatabase<any>(dbName, assetName, 'SELECT term, definition, level, srs_level, next_review_timestamp FROM vocab WHERE (next_review_timestamp <= ? OR srs_level = 0) AND level = ? ORDER BY srs_level, RANDOM() LIMIT 20', [now, lvl]);
+				let rows: any[] = [];
+				const now = Math.floor(Date.now() / 1000);
+				if (itemType === 'kanji') {
+					rows = await getAllFromDatabase<any>(dbName, assetName, 'SELECT character as term, meaning as definition, level, srs_level, next_review_timestamp FROM kanji WHERE (next_review_timestamp <= ? OR srs_level = 0) AND level = ? ORDER BY srs_level, RANDOM() LIMIT 20', [now, lvl]);
+				} else {
+					rows = await getAllFromDatabase<any>(dbName, assetName, 'SELECT term, definition, level, srs_level, next_review_timestamp FROM vocab WHERE (next_review_timestamp <= ? OR srs_level = 0) AND level = ? ORDER BY srs_level, RANDOM() LIMIT 20', [now, lvl]);
+				}
+
+				const result: any = await API.graphql(graphqlOperation(listUserProgresses, { filter: { level: { eq: lvl } } }));
+				const userProgressItems = result.data.listUserProgresses.items as UserProgress[];
+
+				const mergedItems = rows.map(row => {
+					const progress = userProgressItems.find(p => p.term === row.term);
+					if (progress) {
+						return { ...row, ...progress };
 					}
-					if (mounted) {
-						setItems(rows ?? []);
-						setCurrent(0);
-						setShowDef(false);
-					}
+					return row;
+				});
+
+				if (mounted) {
+					setItems(mergedItems ?? []);
+					setCurrent(0);
+					setShowDef(false);
+				}
 			} catch (e) {
 				console.error('Failed to load vocab for level', level, e);
 				if (mounted) setItems([]);
@@ -97,13 +112,19 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 	            break;
 	    }
 
-	    const tableName = itemType === 'kanji' ? 'kanji' : 'vocab';
-	    const termColumn = itemType === 'kanji' ? 'character' : 'term';
+		const progressData = {
+			term: item.term,
+			definition: item.definition,
+			level: item.level,
+			srs_level: newSrsLevel,
+			next_review_timestamp: nextReviewTimestamp,
+		};
 
-	    await runAsync(
-	        `UPDATE ${tableName} SET srs_level = ?, next_review_timestamp = ? WHERE ${termColumn} = ?`,
-	        [newSrsLevel, nextReviewTimestamp, item.term]
-	    );
+		if (item.id) {
+			await API.graphql(graphqlOperation(updateUserProgress, { input: { id: item.id, ...progressData } }));
+		} else {
+			await API.graphql(graphqlOperation(createUserProgress, { input: progressData }));
+		}
 
 	    // Move to next card
 	    handleNext();
@@ -155,11 +176,11 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 						<Text style={styles.progressText}>{current + 1} / {items.length}</Text>
 
 						<View style={styles.buttonRow}>
-							<TouchableOpacity style={styles.button} onPress={() => setShowDef((s) => !s)}>
-								<Text style={styles.buttonText}>{showDef ? '意味を隠す' : '意味を見る'}</Text>
+							<TouchableOpacity style={styles.button} onPress={() => { setShowDef(true); handleSrsUpdate('again'); }}>
+								<Text style={styles.buttonText}>I don't know</Text>
 							</TouchableOpacity>
-							<TouchableOpacity style={styles.button} onPress={handleNext}>
-								<Text style={styles.buttonText}>次へ</Text>
+							<TouchableOpacity style={styles.button} onPress={() => { setShowDef(true); handleSrsUpdate('good'); }}>
+								<Text style={styles.buttonText}>I know</Text>
 							</TouchableOpacity>
 						</View>
 					</View>
@@ -189,11 +210,11 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 					{showDef && <Text style={styles.definition}>{item.definition}</Text>}
 
 					<View style={styles.buttonRow}>
-						<TouchableOpacity style={styles.button} onPress={() => setShowDef((s) => !s)}>
-							<Text style={styles.buttonText}>{showDef ? 'Hide' : 'Show Definition'}</Text>
+						<TouchableOpacity style={styles.button} onPress={() => { setShowDef(true); handleSrsUpdate('again'); }}>
+							<Text style={styles.buttonText}>I don't know</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.button} onPress={handleNext}>
-							<Text style={styles.buttonText}>Next</Text>
+						<TouchableOpacity style={styles.button} onPress={() => { setShowDef(true); handleSrsUpdate('good'); }}>
+							<Text style={styles.buttonText}>I know</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
@@ -217,8 +238,8 @@ const styles = StyleSheet.create({
 	},
 	signInButton: {
 		backgroundColor: '#343A40',
-		paddingVertical: 8,
-		paddingHorizontal: 16,
+		paddingVertical: 4,
+		paddingHorizontal: 10,
 		borderRadius: 8,
 	},
 	signInButtonText: {

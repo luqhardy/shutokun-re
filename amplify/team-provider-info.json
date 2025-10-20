@@ -1,0 +1,23 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-shutokunre-dev-3fb9b-authRole",
+      "UnauthRoleArn": "arn:aws:iam::841838625823:role/amplify-shutokunre-dev-3fb9b-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::841838625823:role/amplify-shutokunre-dev-3fb9b-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-shutokunre-dev-3fb9b-deployment",
+      "UnauthRoleName": "amplify-shutokunre-dev-3fb9b-unauthRole",
+      "StackName": "amplify-shutokunre-dev-3fb9b",
+      "StackId": "arn:aws:cloudformation:us-east-1:841838625823:stack/amplify-shutokunre-dev-3fb9b/10b900a0-aaf3-11f0-bec3-0e9e47edfca5",
+      "AmplifyAppId": "d2ezhfjx7svdqg"
+    },
+    "categories": {
+      "auth": {
+        "shutokunred53a186c": {}
+      },
+      "api": {
+        "shutokunre": {}
+      }
+    }
+  }
+}

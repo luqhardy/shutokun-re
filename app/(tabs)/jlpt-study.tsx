@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import {
   SafeAreaView,
@@ -25,8 +25,10 @@ const MenuButton: React.FC<MenuButtonProps> = ({
   emoji,
   isNew = false,
 }) => {
+  const router = useRouter();
+
   return (
-    <TouchableOpacity style={[styles.menuButton, { backgroundColor: color }]} onPress={() => {window.location.href = '/srsWindow';}}>
+    <TouchableOpacity style={[styles.menuButton, { backgroundColor: color }]} onPress={() => router.push({ pathname: '/srsWindow', params: { level: title.replace('JLPT ', '') } })}>
       <View>
         <Text style={styles.menuButtonTitle}>{title}</Text>
         {subtitle && <Text style={styles.menuButtonSubtitle}>{subtitle}</Text>}

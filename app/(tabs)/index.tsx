@@ -10,6 +10,7 @@ import {
   ScrollView,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { withAuthenticator } from '@aws-amplify/ui-react-native';
 
 type MenuButtonProps = {
   color: string;
@@ -224,4 +225,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default LanguageAppUI;
+export default withAuthenticator(LanguageAppUI);
