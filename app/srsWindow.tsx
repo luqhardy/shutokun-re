@@ -3,10 +3,10 @@ import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, SafeAreaVi
 import { useLocalSearchParams, Link } from 'expo-router';
 import { Image } from 'expo-image';
 import { getAllFromDatabase } from '../db/database';
-import { API, graphqlOperation } from 'aws-amplify';
-import { listUserProgresses } from '../src/graphql/queries';
-import { createUserProgress, updateUserProgress } from '../src/graphql/mutations';
-import { UserProgress } from '../src/API';
+// import { API, graphqlOperation } from 'aws-amplify';
+// import { listUserProgresses } from '../src/graphql/queries';
+// import { createUserProgress, updateUserProgress } from '../src/graphql/mutations';
+// import { UserProgress } from '../src/API';
 
 type VocabRow = {
 	id?: string;
@@ -45,19 +45,19 @@ export default function SRSWindow() {
 					rows = await getAllFromDatabase<any>(dbName, assetName, 'SELECT term, definition, level, srs_level, next_review_timestamp FROM vocab WHERE (next_review_timestamp <= ? OR srs_level = 0) AND level = ? ORDER BY srs_level, RANDOM() LIMIT 20', [now, lvl]);
 				}
 
-				const result: any = await API.graphql(graphqlOperation(listUserProgresses, { filter: { level: { eq: lvl } } }));
-				const userProgressItems = result.data.listUserProgresses.items as UserProgress[];
+				// const result: any = await API.graphql(graphqlOperation(listUserProgresses, { filter: { level: { eq: lvl } } }));
+				// const userProgressItems = result.data.listUserProgresses.items as UserProgress[];
 
-				const mergedItems = rows.map(row => {
-					const progress = userProgressItems.find(p => p.term === row.term);
-					if (progress) {
-						return { ...row, ...progress };
-					}
-					return row;
-				});
+				// const mergedItems = rows.map(row => {
+				// 	const progress = userProgressItems.find(p => p.term === row.term);
+				// 	if (progress) {
+				// 		return { ...row, ...progress };
+				// 	}
+				// 	return row;
+				// });
 
 				if (mounted) {
-					setItems(mergedItems ?? []);
+					setItems(rows ?? []);
 					setCurrent(0);
 					setShowDef(false);
 				}
@@ -112,19 +112,19 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 	            break;
 	    }
 
-		const progressData = {
-			term: item.term,
-			definition: item.definition,
-			level: item.level,
-			srs_level: newSrsLevel,
-			next_review_timestamp: nextReviewTimestamp,
-		};
+		// const progressData = {
+		// 	term: item.term,
+		// 	definition: item.definition,
+		// 	level: item.level,
+		// 	srs_level: newSrsLevel,
+		// 	next_review_timestamp: nextReviewTimestamp,
+		// };
 
-		if (item.id) {
-			await API.graphql(graphqlOperation(updateUserProgress, { input: { id: item.id, ...progressData } }));
-		} else {
-			await API.graphql(graphqlOperation(createUserProgress, { input: progressData }));
-		}
+		// if (item.id) {
+		// 	await API.graphql(graphqlOperation(updateUserProgress, { input: { id: item.id, ...progressData } }));
+		// } else {
+		// 	await API.graphql(graphqlOperation(createUserProgress, { input: progressData }));
+		// }
 
 	    // Move to next card
 	    handleNext();
@@ -155,7 +155,7 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 				<SafeAreaView style={styles.safeArea}>
 					<View style={styles.header}>
 						<View>
-							<Image source={require('../../assets/images/logo.png')} style={{ width: 150, height: 50 }} contentFit="contain" />
+							<Image source={require('../assets/images/logo.png')} style={{ width: 150, height: 50 }} contentFit="contain" />
 						</View>
 						<TouchableOpacity style={styles.signInButton}>
 							<Link href="/signin-modal" asChild>
@@ -193,7 +193,7 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 			<SafeAreaView style={styles.safeArea}>
 				<View style={styles.header}>
 					<View>
-						<Image source={require('../../assets/images/logo.png')} style={{ width: 150, height: 50 }} contentFit="contain" />
+						<Image source={require('../assets/images/logo.png')} style={{ width: 150, height: 50 }} contentFit="contain" />
 					</View>
 					<TouchableOpacity style={styles.signInButton}>
 						<Link href="/signin-modal" asChild>
