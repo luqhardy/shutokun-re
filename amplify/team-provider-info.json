@@ -10,6 +10,11 @@
       "StackName": "amplify-shutokunre-dev-0df88",
       "StackId": "arn:aws:cloudformation:ap-northeast-1:841838625823:stack/amplify-shutokunre-dev-0df88/214c17e0-ad96-11f0-9523-0a1d4112b62b",
       "AmplifyAppId": "d3abkopt9ba79r"
+    },
+    "categories": {
+      "auth": {
+        "shutokunre54657861": {}
+      }
     }
   }
 }
