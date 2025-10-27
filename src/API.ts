@@ -4,19 +4,13 @@
 
 export type CreateUserProgressInput = {
   id?: string | null,
-  term: string,
-  definition: string,
-  level: string,
-  srs_level: number,
-  next_review_timestamp: number,
+  userId: string,
+  progress: string,
 };
 
 export type ModelUserProgressConditionInput = {
-  term?: ModelStringInput | null,
-  definition?: ModelStringInput | null,
-  level?: ModelStringInput | null,
-  srs_level?: ModelIntInput | null,
-  next_review_timestamp?: ModelIntInput | null,
+  userId?: ModelStringInput | null,
+  progress?: ModelStringInput | null,
   and?: Array< ModelUserProgressConditionInput | null > | null,
   or?: Array< ModelUserProgressConditionInput | null > | null,
   not?: ModelUserProgressConditionInput | null,
@@ -65,26 +59,11 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
-export type ModelIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  attributeExists?: boolean | null,
-  attributeType?: ModelAttributeTypes | null,
-};
-
 export type UserProgress = {
   __typename: "UserProgress",
   id: string,
-  term: string,
-  definition: string,
-  level: string,
-  srs_level: number,
-  next_review_timestamp: number,
+  userId: string,
+  progress: string,
   createdAt: string,
   updatedAt: string,
   owner?: string | null,
@@ -92,11 +71,8 @@ export type UserProgress = {
 
 export type UpdateUserProgressInput = {
   id: string,
-  term?: string | null,
-  definition?: string | null,
-  level?: string | null,
-  srs_level?: number | null,
-  next_review_timestamp?: number | null,
+  userId?: string | null,
+  progress?: string | null,
 };
 
 export type DeleteUserProgressInput = {
@@ -105,11 +81,8 @@ export type DeleteUserProgressInput = {
 
 export type ModelUserProgressFilterInput = {
   id?: ModelIDInput | null,
-  term?: ModelStringInput | null,
-  definition?: ModelStringInput | null,
-  level?: ModelStringInput | null,
-  srs_level?: ModelIntInput | null,
-  next_review_timestamp?: ModelIntInput | null,
+  userId?: ModelStringInput | null,
+  progress?: ModelStringInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelUserProgressFilterInput | null > | null,
@@ -140,13 +113,16 @@ export type ModelUserProgressConnection = {
   nextToken?: string | null,
 };
 
+export enum ModelSortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}
+
+
 export type ModelSubscriptionUserProgressFilterInput = {
   id?: ModelSubscriptionIDInput | null,
-  term?: ModelSubscriptionStringInput | null,
-  definition?: ModelSubscriptionStringInput | null,
-  level?: ModelSubscriptionStringInput | null,
-  srs_level?: ModelSubscriptionIntInput | null,
-  next_review_timestamp?: ModelSubscriptionIntInput | null,
+  userId?: ModelSubscriptionStringInput | null,
+  progress?: ModelSubscriptionStringInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionUserProgressFilterInput | null > | null,
@@ -184,18 +160,6 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
-export type ModelSubscriptionIntInput = {
-  ne?: number | null,
-  eq?: number | null,
-  le?: number | null,
-  lt?: number | null,
-  ge?: number | null,
-  gt?: number | null,
-  between?: Array< number | null > | null,
-  in?: Array< number | null > | null,
-  notIn?: Array< number | null > | null,
-};
-
 export type CreateUserProgressMutationVariables = {
   input: CreateUserProgressInput,
   condition?: ModelUserProgressConditionInput | null,
@@ -205,11 +169,8 @@ export type CreateUserProgressMutation = {
   createUserProgress?:  {
     __typename: "UserProgress",
     id: string,
-    term: string,
-    definition: string,
-    level: string,
-    srs_level: number,
-    next_review_timestamp: number,
+    userId: string,
+    progress: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -225,11 +186,8 @@ export type UpdateUserProgressMutation = {
   updateUserProgress?:  {
     __typename: "UserProgress",
     id: string,
-    term: string,
-    definition: string,
-    level: string,
-    srs_level: number,
-    next_review_timestamp: number,
+    userId: string,
+    progress: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -245,11 +203,8 @@ export type DeleteUserProgressMutation = {
   deleteUserProgress?:  {
     __typename: "UserProgress",
     id: string,
-    term: string,
-    definition: string,
-    level: string,
-    srs_level: number,
-    next_review_timestamp: number,
+    userId: string,
+    progress: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -264,11 +219,8 @@ export type GetUserProgressQuery = {
   getUserProgress?:  {
     __typename: "UserProgress",
     id: string,
-    term: string,
-    definition: string,
-    level: string,
-    srs_level: number,
-    next_review_timestamp: number,
+    userId: string,
+    progress: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -287,11 +239,32 @@ export type ListUserProgressesQuery = {
     items:  Array< {
       __typename: "UserProgress",
       id: string,
-      term: string,
-      definition: string,
-      level: string,
-      srs_level: number,
-      next_review_timestamp: number,
+      userId: string,
+      progress: string,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null >,
+    nextToken?: string | null,
+  } | null,
+};
+
+export type UserProgressByUserIdQueryVariables = {
+  userId: string,
+  sortDirection?: ModelSortDirection | null,
+  filter?: ModelUserProgressFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+};
+
+export type UserProgressByUserIdQuery = {
+  userProgressByUserId?:  {
+    __typename: "ModelUserProgressConnection",
+    items:  Array< {
+      __typename: "UserProgress",
+      id: string,
+      userId: string,
+      progress: string,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -309,11 +282,8 @@ export type OnCreateUserProgressSubscription = {
   onCreateUserProgress?:  {
     __typename: "UserProgress",
     id: string,
-    term: string,
-    definition: string,
-    level: string,
-    srs_level: number,
-    next_review_timestamp: number,
+    userId: string,
+    progress: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -329,11 +299,8 @@ export type OnUpdateUserProgressSubscription = {
   onUpdateUserProgress?:  {
     __typename: "UserProgress",
     id: string,
-    term: string,
-    definition: string,
-    level: string,
-    srs_level: number,
-    next_review_timestamp: number,
+    userId: string,
+    progress: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -349,11 +316,8 @@ export type OnDeleteUserProgressSubscription = {
   onDeleteUserProgress?:  {
     __typename: "UserProgress",
     id: string,
-    term: string,
-    definition: string,
-    level: string,
-    srs_level: number,
-    next_review_timestamp: number,
+    userId: string,
+    progress: string,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,

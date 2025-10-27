@@ -12,38 +12,7 @@ import {
   Button,
 } from 'react-native';
 
-// Define the type for the props of the MenuButton component
-type MenuButtonProps = {
-  color: string;
-  title: string;
-  subtitle?: string; // Optional prop
-  emoji: string;
-  isNew?: boolean; // Optional prop
-};
 
-// Reusable component for the main menu buttons
-const MenuButton: React.FC<MenuButtonProps> = ({
-  color,
-  title,
-  subtitle,
-  emoji,
-  isNew = false,
-}) => {
-  return (
-    <TouchableOpacity style={[styles.menuButton, { backgroundColor: color }]}>
-      <View>
-        <Text style={styles.menuButtonTitle}>{title}</Text>
-        {subtitle && <Text style={styles.menuButtonSubtitle}>{subtitle}</Text>}
-      </View>
-      <Text style={styles.menuButtonEmoji}>{emoji}</Text>
-      {isNew && (
-        <View style={styles.newBadge}>
-          <Text style={styles.newBadgeText}>New</Text>
-        </View>
-      )}
-    </TouchableOpacity>
-  );
-};
 
 const hiragana = [
   { kana: 'あ', romaji: 'a' },

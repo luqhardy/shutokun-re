@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import {
@@ -9,6 +9,10 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import { getCurrentUser, AuthUser } from 'aws-amplify/auth';
+import { API, graphqlOperation } from 'aws-amplify';
+import { listUserProgresses } from '../../src/graphql/queries';
+import { UserProgress } from '../../src/API';
 
 type MenuButtonProps = {
   color: string;
@@ -16,6 +20,7 @@ type MenuButtonProps = {
   subtitle?: string;
   emoji: string;
   isNew?: boolean;
+  progress?: number;
 };
 
 const MenuButton: React.FC<MenuButtonProps> = ({
@@ -24,6 +29,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({
   subtitle,
   emoji,
   isNew = false,
+  progress,
 }) => {
   const router = useRouter();
 
@@ -32,6 +38,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({
       <View>
         <Text style={styles.menuButtonTitle}>{title}</Text>
         {subtitle && <Text style={styles.menuButtonSubtitle}>{subtitle}</Text>}
+        {progress !== undefined && <Text style={styles.menuButtonSubtitle}>{progress}% complete</Text>}
       </View>
       <Text style={styles.menuButtonEmoji}>{emoji}</Text>
       {isNew && (
@@ -44,6 +51,47 @@ const MenuButton: React.FC<MenuButtonProps> = ({
 };
 
 const LanguageAppUI: React.FC = () => {
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [progress, setProgress] = useState<Map<string, number>>(new Map());
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+      } catch (error) {
+        setUser(null);
+      }
+    };
+
+    checkUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchProgress = async () => {
+      if (user) {
+        try {
+          const result: any = await API.graphql(graphqlOperation(listUserProgresses));
+          const userProgressItems = result.data.listUserProgresses.items as UserProgress[];
+          const progressMap = new Map<string, number>();
+          userProgressItems.forEach(item => {
+            const level = item.level;
+            if (progressMap.has(level)) {
+              progressMap.set(level, progressMap.get(level)! + 1);
+            } else {
+              progressMap.set(level, 1);
+            }
+          });
+          setProgress(progressMap);
+        } catch (error) {
+          console.error('Error fetching user progress:', error);
+        }
+      }
+    };
+
+    fetchProgress();
+  }, [user]);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -69,27 +117,34 @@ const LanguageAppUI: React.FC = () => {
             color="#ff0000ff"
             title="JLPT N1"
             subtitle="Hardest Level"
+            emoji=""
+            progress={progress.get('N1')}
           />
           <MenuButton
             color="#ff9900ff"
             title="JLPT N2"
+            subtitle=""
             emoji=""
+            progress={progress.get('N2')}
           />
           <MenuButton
             color="#f7ce00ff"
             title="JLPT N3"
             emoji=""
+            progress={progress.get('N3')}
           />
           <MenuButton
             color="#078bffff"
             title="JLPT N4"
             emoji=""
+            progress={progress.get('N4')}
           />
           <MenuButton
             color="#15c03dff"
             title="JLPT N5"
             subtitle="Easiest Level"
             emoji=""
+            progress={progress.get('N5')}
           />
         </ScrollView>
         

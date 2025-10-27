@@ -4,18 +4,50 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import { Amplify } from 'aws-amplify';
 import awsconfig from '../src/aws-exports';
-import { withAuthenticator } from '@aws-amplify/ui-react-native';
+import { Hub } from 'aws-amplify/utils';
+import { getCurrentUser, AuthUser } from 'aws-amplify/auth';
+import React, { useState, useEffect } from 'react';
+
 
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
 Amplify.configure(awsconfig);
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+
 
 function RootLayout() {
   const colorScheme = useColorScheme();
+  const [user, setUser] = useState<AuthUser | null>(null);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+      } catch (error) {
+        setUser(null);
+      }
+    };
+
+    checkUser();
+
+    const hubListener = (data: any) => {
+      switch (data.payload.event) {
+        case 'signedIn':
+          checkUser();
+          break;
+        case 'signedOut':
+          setUser(null);
+          break;
+      }
+    };
+
+    Hub.listen('auth', hubListener);
+
+    return () => {
+      Hub.remove('auth', hubListener);
+    };
+  }, []);
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
@@ -28,4 +60,4 @@ function RootLayout() {
   );
 }
 
-export default withAuthenticator(RootLayout);
+export default RootLayout;

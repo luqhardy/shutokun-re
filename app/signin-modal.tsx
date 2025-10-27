@@ -1,7 +1,10 @@
-import { Link } from 'expo-router';
-import { StyleSheet } from 'react-native';
+import { Link, useRouter } from 'expo-router';
+import { signIn, signInWithRedirect, getCurrentUser } from 'aws-amplify/auth';
+import { StyleSheet, TextInput, TouchableOpacity, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import { TextInput, TouchableOpacity, Text, View } from 'react-native';
+import { API, graphqlOperation } from 'aws-amplify';
+import { getUserProgress, userProgressByUserId } from '../src/graphql/queries';
+import { createUserProgress } from '../src/graphql/mutations';
 //import { ThemedText } from '@/components/themed-text';
 //import { ThemedView } from '@/components/themed-view';
 
@@ -9,15 +12,47 @@ export default function ModalScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const router = useRouter();
 
-  const handleSignIn = () => {
+  const fetchOrCreateUserProgress = async () => {
+    try {
+      const { userId } = await getCurrentUser();
+      const userProgress = await API.graphql(graphqlOperation(userProgressByUserId, { userId: userId }));
+
+      // @ts-ignore
+      if (userProgress.data.userProgressByUserId.items.length > 0) {
+        // User progress already exists
+        // You can store it in your app's state here
+      } else {
+        // User progress does not exist, create it
+        await API.graphql(graphqlOperation(createUserProgress, { input: { id: userId, userId: userId, progress: JSON.stringify({}) } }));
+      }
+    } catch (error) {
+      console.error('Error fetching or creating user progress:', error);
+    }
+  };
+
+  const handleSignIn = async () => {
     if (!email || !password) {
       setError('メールとパスワードを入力してください');
       return;
     }
-    // サインイン処理（ダミー）
-    setError('');
-    alert('サインインしました！');
+    try {
+      await signIn({ username: email, password });
+      await fetchOrCreateUserProgress();
+      router.back();
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithRedirect({ provider: 'Google' });
+      await fetchOrCreateUserProgress();
+    } catch (error: any) {
+      setError(error.message);
+    }
   };
 
   return (
@@ -43,7 +78,7 @@ export default function ModalScreen() {
         <TouchableOpacity style={styles.button} onPress={handleSignIn}>
           <Text style={styles.buttonText}>Sign In</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.googleButton}>
+        <TouchableOpacity style={styles.googleButton} onPress={handleGoogleSignIn}>
           <Text style={styles.googleButtonText}>Sign in with Google</Text>
         </TouchableOpacity>
         <Link href="/" dismissTo style={styles.link}>
@@ -92,19 +127,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#fff',
-  },
+  
   title: {
     fontSize: 24,
     fontWeight: 'bold',

@@ -1,0 +1,6 @@
+
+type UserProgress @model @auth(rules: [{allow: owner}]) {
+  id: ID!
+  userId: String! @index(name: "byUserId", queryField: "userProgressByUserId")
+  progress: AWSJSON!
+}

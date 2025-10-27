@@ -19,12 +19,32 @@ CREATE TABLE IF NOT EXISTS kanji (
 INSERT INTO vocab (term, definition, level) VALUES
 ('犬', 'いぬ (dog)', 'N5'),
 ('猫', 'ねこ (cat)', 'N5'),
-('学校', 'がっこう (school)', 'N5');
+('学校', 'がっこう (school)', 'N5'),
+('私', 'わたし (I, me)', 'N5'),
+('人', 'ひと (person)', 'N5'),
+('日本', 'にほん (Japan)', 'N5'),
+('本', 'ほん (book)', 'N5'),
+('学生', 'がくせい (student)', 'N5'),
+('先生', 'せんせい (teacher)', 'N5'),
+('友達', 'ともだち (friend)', 'N5'),
+('家', 'いえ/うち (house, home)', 'N5'),
+('車', 'くるま (car)', 'N5'),
+('駅', 'えき (station)', 'N5');
 
 INSERT INTO kanji (character, meaning, level) VALUES
 ('一', 'one', 'N5'),
 ('二', 'two', 'N5'),
-('三', 'three', 'N5');
+('三', 'three', 'N5'),
+('四', 'four', 'N5'),
+('五', 'five', 'N5'),
+('六', 'six', 'N5'),
+('七', 'seven', 'N5'),
+('八', 'eight', 'N5'),
+('九', 'nine', 'N5'),
+('十', 'ten', 'N5'),
+('百', 'hundred', 'N5'),
+('千', 'thousand', 'N5'),
+('万', 'ten thousand', 'N5');
 
 -- N4 サンプルデータ
 INSERT INTO vocab (term, definition, level) VALUES

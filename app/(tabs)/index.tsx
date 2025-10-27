@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'expo-router';
+import { Link, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import {
   SafeAreaView,
@@ -9,54 +9,20 @@ import {
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
-import { useRouter } from 'expo-router';
-import { withAuthenticator } from '@aws-amplify/ui-react-native';
 
-type MenuButtonProps = {
-  color: string;
-  title: string;
-  subtitle?: string; // Optional
-  emoji: string;
-  isNew?: boolean; // Optional
-};
+import { MaterialIcons } from '@expo/vector-icons';
 
-const MenuButton: React.FC<MenuButtonProps> = ({
-  color,
-  title,
-  subtitle,
-  emoji,
-  isNew = false,
-}) => {
-  const router = useRouter();
 
-  return (
-    <TouchableOpacity
-      style={[styles.menuButton, { backgroundColor: color }]}
-      onPress={() => router.replace(menuItems.find(item => item.title === title)?.route ?? '/')}
-    >
-      <View>
-        <Text style={styles.menuButtonTitle}>{title}</Text>
-        {subtitle && <Text style={styles.menuButtonSubtitle}>{subtitle}</Text>}
-      </View>
-      <Text style={styles.menuButtonEmoji}>{emoji}</Text>
-      {isNew && (
-        <View style={styles.newBadge}>
-          <Text style={styles.newBadgeText}>New</Text>
-        </View>
-      )}
-    </TouchableOpacity>
-  );
-};
 
 const LanguageAppUI: React.FC = () => {
   const router = useRouter();
 
   const menuItems = [
-    { title: 'JLPT Study', emoji: '', color: '#28a745', route: '/jlpt-study' },
-    { title: 'Hiragana', emoji: '', color: '#17a2b8', route: '/kana-quiz' },
-    { title: 'Custom Mode (Beta)', emoji: '', color: '#007bff', route: '/custom-mode' },
-    { title: 'Vocab Editor (Beta)', emoji: '', color: '#ffd000ff', route: '/vocab-editor' },
-    { title: 'Japanese Sentence Analyser', emoji: '', color: '#6f42c1', route: '/bunsekikun', isNew: true },
+    { title: 'JLPT Study', description: 'Prepare for the Japanese Language Proficiency Test', icon: 'school', color: '#28a745', route: '/jlpt-study' },
+    { title: 'Hiragana', description: 'Learn and practice Hiragana characters', icon: 'translate', color: '#17a2b8', route: '/kana-quiz' },
+    { title: 'Custom Mode (Beta)', description: 'Create your own custom study sets', icon: 'create', color: '#007bff', route: '/custom-mode' },
+    { title: 'Vocab Editor (Beta)', description: 'Edit and manage your vocabulary lists', icon: 'edit', color: '#ffd000ff', route: '/vocab-editor' },
+    { title: 'Japanese Sentence Analyser', description: 'Analyse Japanese sentences to understand grammar and vocabulary', icon: 'analytics', color: '#6f42c1', route: '/bunsekikun', isNew: true },
   ];
 
   return (
@@ -86,7 +52,13 @@ const LanguageAppUI: React.FC = () => {
               style={[styles.button, { backgroundColor: item.color }]}
               onPress={() => router.push(item.route as any)}
             >
-              <Text style={styles.buttonText}>{item.emoji} {item.title}</Text>
+              <View style={styles.buttonContent}>
+                <MaterialIcons name={item.icon as any} size={30} color="white" style={styles.icon} />
+                <View style={styles.textContainer}>
+                    <Text style={styles.buttonText}>{item.title}</Text>
+                    <Text style={styles.buttonDescription}>{item.description}</Text>
+                </View>
+              </View>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -216,13 +188,26 @@ const styles = StyleSheet.create({
     padding: 18,
     borderRadius: 12,
     marginVertical: 10,
+  },
+  buttonContent: {
+    flexDirection: 'row',
     alignItems: 'center',
+  },
+  icon: {
+    marginRight: 15,
+  },
+  textContainer: {
+      flex: 1,
   },
   buttonText: {
     color: '#fff',
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  buttonDescription: {
+      color: '#fff',
+      fontSize: 14,
   }
 });
 
-export default withAuthenticator(LanguageAppUI);
+export default LanguageAppUI;
