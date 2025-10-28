@@ -113,6 +113,7 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 	    const item = items[current];
 	    if (!item || !user) return;
 
+	    let newSrsLevel = item.srs_level;
 	    let points = 0;
 	    switch (rating) {
 	        case 'again':
