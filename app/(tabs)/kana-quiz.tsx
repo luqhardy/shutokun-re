@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'expo-router';
 import { Image } from 'expo-image';
 import {
@@ -11,6 +11,11 @@ import {
   TextInput,
   Button,
 } from 'react-native';
+import { getCurrentUser, AuthUser } from 'aws-amplify/auth';
+import { API, graphqlOperation } from 'aws-amplify';
+import { updateUserProgress } from '../../src/graphql/mutations';
+import { userProgressByUserId } from '../../src/graphql/queries';
+import { UserProgress } from '../../src/API';
 
 
 
@@ -119,6 +124,39 @@ const LanguageAppUI: React.FC = () => {
   const [input, setInput] = useState('');
   const [feedback, setFeedback] = useState('');
   const [total, setTotal] = useState(0);
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [userProgress, setUserProgress] = useState<UserProgress | null>(null);
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const currentUser = await getCurrentUser();
+        setUser(currentUser);
+      } catch (error) {
+        setUser(null);
+      }
+    };
+
+    checkUser();
+  }, []);
+
+  useEffect(() => {
+    const fetchUserProgress = async () => {
+      if (user) {
+        try {
+          const result: any = await API.graphql(graphqlOperation(userProgressByUserId, { userId: user.userId }));
+          const userProgressItems = result.data.userProgressByUserId.items as UserProgress[];
+          if (userProgressItems.length > 0) {
+            setUserProgress(userProgressItems[0]);
+          }
+        } catch (error) {
+          console.error('Error fetching user progress:', error);
+        }
+      }
+    };
+
+    fetchUserProgress();
+  }, [user]);
 
   function randomKana(mode: 'hiragana' | 'katakana') {
     const arr = mode === 'hiragana' ? hiragana : katakana;
@@ -138,6 +176,10 @@ const LanguageAppUI: React.FC = () => {
     if (input.trim().toLowerCase() === question.romaji) {
       setScore(score + 1);
       setFeedback('Correct!');
+      if (user && userProgress) {
+        const newPoints = (userProgress.points || 0) + 1;
+        API.graphql(graphqlOperation(updateUserProgress, { input: { id: userProgress.id, points: newPoints } }));
+      }
     } else {
       setFeedback(`Wrong! (${question.kana} = ${question.romaji})`);
     }

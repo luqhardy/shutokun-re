@@ -25,6 +25,10 @@ In the output, you'll find options to open the app in a
 
 You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
+## User Sync
+
+This app uses AWS Amplify to sync user progress across devices. To use this feature, you'll need to sign in with an AWS account.
+
 ## Get a fresh project
 
 When you're ready, run:

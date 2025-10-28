@@ -16,6 +16,7 @@ export const createUserProgress = /* GraphQL */ `mutation CreateUserProgress(
     id
     userId
     progress
+    points
     createdAt
     updatedAt
     owner
@@ -34,6 +35,7 @@ export const updateUserProgress = /* GraphQL */ `mutation UpdateUserProgress(
     id
     userId
     progress
+    points
     createdAt
     updatedAt
     owner
@@ -52,6 +54,7 @@ export const deleteUserProgress = /* GraphQL */ `mutation DeleteUserProgress(
     id
     userId
     progress
+    points
     createdAt
     updatedAt
     owner

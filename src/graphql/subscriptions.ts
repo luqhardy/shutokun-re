@@ -16,6 +16,7 @@ export const onCreateUserProgress = /* GraphQL */ `subscription OnCreateUserProg
     id
     userId
     progress
+    points
     createdAt
     updatedAt
     owner
@@ -34,6 +35,7 @@ export const onUpdateUserProgress = /* GraphQL */ `subscription OnUpdateUserProg
     id
     userId
     progress
+    points
     createdAt
     updatedAt
     owner
@@ -52,6 +54,7 @@ export const onDeleteUserProgress = /* GraphQL */ `subscription OnDeleteUserProg
     id
     userId
     progress
+    points
     createdAt
     updatedAt
     owner

@@ -25,7 +25,7 @@ export default function ModalScreen() {
         // You can store it in your app's state here
       } else {
         // User progress does not exist, create it
-        await API.graphql(graphqlOperation(createUserProgress, { input: { id: userId, userId: userId, progress: JSON.stringify({}) } }));
+        await API.graphql(graphqlOperation(createUserProgress, { input: { id: userId, userId: userId, progress: JSON.stringify({}), points: 0 } }));
       }
     } catch (error) {
       console.error('Error fetching or creating user progress:', error);

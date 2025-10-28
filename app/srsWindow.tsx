@@ -16,6 +16,7 @@ type VocabRow = {
 	level: string;
 	srs_level: number;
 	next_review_timestamp: number;
+	points?: number;
 };
 
 export default function SRSWindow() {
@@ -112,20 +113,22 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 	    const item = items[current];
 	    if (!item || !user) return;
 
-	    let newSrsLevel = item.srs_level;
-
+	    let points = 0;
 	    switch (rating) {
 	        case 'again':
 	            newSrsLevel = 0;
 	            break;
 	        case 'hard':
 	            newSrsLevel = Math.max(0, newSrsLevel - 1);
+	            points = 1;
 	            break;
 	        case 'good':
 	            newSrsLevel++;
+	            points = 10;
 	            break;
 	        case 'easy':
 	            newSrsLevel += 2; // Jump two steps
+	            points = 10;
 	            break;
 	    }
 
@@ -138,6 +141,7 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 		 	level: item.level,
 		 	srs_level: newSrsLevel,
 		 	next_review_timestamp: nextReviewTimestamp,
+		 	points: (item.points || 0) + points,
 		 };
 
 		if (item.id) {

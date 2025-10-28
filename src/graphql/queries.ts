@@ -13,6 +13,7 @@ export const getUserProgress = /* GraphQL */ `query GetUserProgress($id: ID!) {
     id
     userId
     progress
+    points
     createdAt
     updatedAt
     owner
@@ -33,6 +34,7 @@ export const listUserProgresses = /* GraphQL */ `query ListUserProgresses(
       id
       userId
       progress
+      points
       createdAt
       updatedAt
       owner
@@ -64,6 +66,7 @@ export const userProgressByUserId = /* GraphQL */ `query UserProgressByUserId(
       id
       userId
       progress
+      points
       createdAt
       updatedAt
       owner

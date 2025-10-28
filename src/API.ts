@@ -6,11 +6,13 @@ export type CreateUserProgressInput = {
   id?: string | null,
   userId: string,
   progress: string,
+  points?: number | null,
 };
 
 export type ModelUserProgressConditionInput = {
   userId?: ModelStringInput | null,
   progress?: ModelStringInput | null,
+  points?: ModelIntInput | null,
   and?: Array< ModelUserProgressConditionInput | null > | null,
   or?: Array< ModelUserProgressConditionInput | null > | null,
   not?: ModelUserProgressConditionInput | null,
@@ -59,11 +61,24 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type ModelIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  attributeExists?: boolean | null,
+  attributeType?: ModelAttributeTypes | null,
+};
+
 export type UserProgress = {
   __typename: "UserProgress",
   id: string,
   userId: string,
   progress: string,
+  points?: number | null,
   createdAt: string,
   updatedAt: string,
   owner?: string | null,
@@ -73,6 +88,7 @@ export type UpdateUserProgressInput = {
   id: string,
   userId?: string | null,
   progress?: string | null,
+  points?: number | null,
 };
 
 export type DeleteUserProgressInput = {
@@ -83,6 +99,7 @@ export type ModelUserProgressFilterInput = {
   id?: ModelIDInput | null,
   userId?: ModelStringInput | null,
   progress?: ModelStringInput | null,
+  points?: ModelIntInput | null,
   createdAt?: ModelStringInput | null,
   updatedAt?: ModelStringInput | null,
   and?: Array< ModelUserProgressFilterInput | null > | null,
@@ -123,6 +140,7 @@ export type ModelSubscriptionUserProgressFilterInput = {
   id?: ModelSubscriptionIDInput | null,
   userId?: ModelSubscriptionStringInput | null,
   progress?: ModelSubscriptionStringInput | null,
+  points?: ModelSubscriptionIntInput | null,
   createdAt?: ModelSubscriptionStringInput | null,
   updatedAt?: ModelSubscriptionStringInput | null,
   and?: Array< ModelSubscriptionUserProgressFilterInput | null > | null,
@@ -160,6 +178,18 @@ export type ModelSubscriptionStringInput = {
   notIn?: Array< string | null > | null,
 };
 
+export type ModelSubscriptionIntInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  between?: Array< number | null > | null,
+  in?: Array< number | null > | null,
+  notIn?: Array< number | null > | null,
+};
+
 export type CreateUserProgressMutationVariables = {
   input: CreateUserProgressInput,
   condition?: ModelUserProgressConditionInput | null,
@@ -171,6 +201,7 @@ export type CreateUserProgressMutation = {
     id: string,
     userId: string,
     progress: string,
+    points?: number | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -188,6 +219,7 @@ export type UpdateUserProgressMutation = {
     id: string,
     userId: string,
     progress: string,
+    points?: number | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -205,6 +237,7 @@ export type DeleteUserProgressMutation = {
     id: string,
     userId: string,
     progress: string,
+    points?: number | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -221,6 +254,7 @@ export type GetUserProgressQuery = {
     id: string,
     userId: string,
     progress: string,
+    points?: number | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -241,6 +275,7 @@ export type ListUserProgressesQuery = {
       id: string,
       userId: string,
       progress: string,
+      points?: number | null,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -265,6 +300,7 @@ export type UserProgressByUserIdQuery = {
       id: string,
       userId: string,
       progress: string,
+      points?: number | null,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
@@ -284,6 +320,7 @@ export type OnCreateUserProgressSubscription = {
     id: string,
     userId: string,
     progress: string,
+    points?: number | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -301,6 +338,7 @@ export type OnUpdateUserProgressSubscription = {
     id: string,
     userId: string,
     progress: string,
+    points?: number | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -318,6 +356,7 @@ export type OnDeleteUserProgressSubscription = {
     id: string,
     userId: string,
     progress: string,
+    points?: number | null,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,

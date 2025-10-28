@@ -12,6 +12,7 @@ import {
 import { getCurrentUser, AuthUser } from 'aws-amplify/auth';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listUserProgresses } from '../../src/graphql/queries';
+import { getAllFromDatabase } from '../../db/database';
 import { UserProgress } from '../../src/API';
 
 type MenuButtonProps = {
@@ -53,6 +54,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({
 const LanguageAppUI: React.FC = () => {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [progress, setProgress] = useState<Map<string, number>>(new Map());
+  const [totalItems, setTotalItems] = useState<Map<string, number>>(new Map());
 
   useEffect(() => {
     const checkUser = async () => {
@@ -92,6 +94,26 @@ const LanguageAppUI: React.FC = () => {
     fetchProgress();
   }, [user]);
 
+  useEffect(() => {
+    const fetchTotalItems = async () => {
+      try {
+        const levels = ['N1', 'N2', 'N3', 'N4', 'N5'];
+        const totalItemsMap = new Map<string, number>();
+        for (const level of levels) {
+          const vocabRows: any[] = await getAllFromDatabase(undefined, undefined, 'SELECT COUNT(*) as count FROM vocab WHERE level = ?', [level]);
+          const kanjiRows: any[] = await getAllFromDatabase(undefined, undefined, 'SELECT COUNT(*) as count FROM kanji WHERE level = ?', [level]);
+          const total = vocabRows[0].count + kanjiRows[0].count;
+          totalItemsMap.set(level, total);
+        }
+        setTotalItems(totalItemsMap);
+      } catch (error) {
+        console.error('Error fetching total items:', error);
+      }
+    };
+
+    fetchTotalItems();
+  }, []);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
@@ -118,33 +140,33 @@ const LanguageAppUI: React.FC = () => {
             title="JLPT N1"
             subtitle="Hardest Level"
             emoji=""
-            progress={progress.get('N1')}
+            progress={totalItems.get('N1') ? Math.round((progress.get('N1') || 0) / totalItems.get('N1')! * 100) : 0}
           />
           <MenuButton
             color="#ff9900ff"
             title="JLPT N2"
             subtitle=""
             emoji=""
-            progress={progress.get('N2')}
+            progress={totalItems.get('N2') ? Math.round((progress.get('N2') || 0) / totalItems.get('N2')! * 100) : 0}
           />
           <MenuButton
             color="#f7ce00ff"
             title="JLPT N3"
             emoji=""
-            progress={progress.get('N3')}
+            progress={totalItems.get('N3') ? Math.round((progress.get('N3') || 0) / totalItems.get('N3')! * 100) : 0}
           />
           <MenuButton
             color="#078bffff"
             title="JLPT N4"
             emoji=""
-            progress={progress.get('N4')}
+            progress={totalItems.get('N4') ? Math.round((progress.get('N4') || 0) / totalItems.get('N4')! * 100) : 0}
           />
           <MenuButton
             color="#15c03dff"
             title="JLPT N5"
             subtitle="Easiest Level"
             emoji=""
-            progress={progress.get('N5')}
+            progress={totalItems.get('N5') ? Math.round((progress.get('N5') || 0) / totalItems.get('N5')! * 100) : 0}
           />
         </ScrollView>
         
