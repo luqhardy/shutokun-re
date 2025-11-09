@@ -42,10 +42,10 @@ function RootLayout() {
       }
     };
 
-    Hub.listen('auth', hubListener);
+    const unsubscribe = Hub.listen('auth', hubListener);
 
     return () => {
-      Hub.remove('auth', hubListener);
+      unsubscribe();
     };
   }, []);
 

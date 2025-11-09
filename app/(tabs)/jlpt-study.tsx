@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import {
-  SafeAreaView,
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { getCurrentUser, AuthUser } from 'aws-amplify/auth';
 import { API, graphqlOperation } from 'aws-amplify';
 import { listUserProgresses } from '../../src/graphql/queries';

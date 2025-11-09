@@ -1,13 +1,13 @@
 import React from 'react';
 import { Link } from 'expo-router';
 import {
-  SafeAreaView,
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const customMode: React.FC = () => {
   return (

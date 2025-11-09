@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, Link } from 'expo-router';
 import { Image } from 'expo-image';
 import { getAllFromDatabase } from '../db/database';
 import { API, graphqlOperation } from 'aws-amplify';
-import { listUserProgresses } from '../src/graphql/queries';
+import { userProgressByUserId } from '../src/graphql/queries';
 import { createUserProgress, updateUserProgress } from '../src/graphql/mutations';
 import { UserProgress } from '../src/API';
 import { getCurrentUser, AuthUser } from 'aws-amplify/auth';
@@ -62,13 +63,28 @@ export default function SRSWindow() {
 				}
 
 				if (user) {
-					const result: any = await API.graphql(graphqlOperation(listUserProgresses, { filter: { level: { eq: lvl } } }));
-					const userProgressItems = result.data.listUserProgresses.items as UserProgress[];
+					const result: any = await API.graphql(graphqlOperation(userProgressByUserId, { userId: user.userId }));
+					const userProgressItems = result.data.userProgressByUserId.items as UserProgress[];
 
 					const mergedItems = rows.map(row => {
-						const progress = userProgressItems.find(p => p.term === row.term);
-						if (progress) {
-							return { ...row, ...progress };
+						const progressItem = userProgressItems.find(p => {
+							try {
+								const progressData = JSON.parse(p.progress);
+								return progressData.term === row.term;
+							} catch (e) {
+								return false;
+							}
+						});
+
+						if (progressItem) {
+							const progressData = JSON.parse(progressItem.progress);
+							return {
+								...row,
+								id: progressItem.id,
+								srs_level: progressData.srs_level,
+								next_review_timestamp: progressData.next_review_timestamp,
+								points: progressItem.points,
+							};
 						}
 						return row;
 					});
@@ -99,7 +115,7 @@ export default function SRSWindow() {
 		return () => {
 			mounted = false;
 		};
-	}, [level, itemType, dbName, assetName]);
+	}, [level, itemType, dbName, assetName, user]);
 
 
 
@@ -133,26 +149,43 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 	            break;
 	    }
 
+		newSrsLevel = Math.min(newSrsLevel, srsIntervals.length - 1);
+
 		const nextReviewTimestamp = Math.floor(Date.now() / 1000) + srsIntervals[newSrsLevel];
 
-		 const progressData = {
-		 	id: `${user.userId}-${item.term}`,
-		 	term: item.term,
-		 	definition: item.definition,
-		 	level: item.level,
-		 	srs_level: newSrsLevel,
-		 	next_review_timestamp: nextReviewTimestamp,
-		 	points: (item.points || 0) + points,
-		 };
+		const progressJSON = {
+			term: item.term,
+			definition: item.definition,
+			level: item.level,
+			srs_level: newSrsLevel,
+			next_review_timestamp: nextReviewTimestamp,
+		};
 
-		if (item.id) {
-		 	await API.graphql(graphqlOperation(updateUserProgress, { input: { id: item.id, ...progressData } }));
-		 } else {
-		 	await API.graphql(graphqlOperation(createUserProgress, { input: progressData }));
-		 }
+		const newPoints = (item.points || 0) + points;
 
-	    // Move to next card
-	    handleNext();
+		try {
+			if (item.id) { // item.id is the UserProgress id
+				const updateInput = {
+					id: item.id,
+					progress: JSON.stringify(progressJSON),
+					points: newPoints,
+				};
+				await API.graphql(graphqlOperation(updateUserProgress, { input: updateInput }));
+			} else {
+				const createInput = {
+					id: `${user.userId}-${item.term}`,
+					userId: user.userId,
+					progress: JSON.stringify(progressJSON),
+					points: newPoints,
+				};
+				await API.graphql(graphqlOperation(createUserProgress, { input: createInput }));
+			}
+		} catch (e) {
+			console.error("Failed to update SRS progress", e);
+		} finally {
+			// Move to next card
+			handleNext();
+		}
 	};
 
 	if (loading) {
@@ -200,14 +233,20 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 
 						<Text style={styles.progressText}>{current + 1} / {items.length}</Text>
 
-						<View style={styles.buttonRow}>
-							<TouchableOpacity style={styles.button} onPress={() => { setShowDef(true); handleSrsUpdate('again'); }}>
-								<Text style={styles.buttonText}>I don&apos;t know</Text>
+						{!showDef ? (
+							<TouchableOpacity style={styles.button} onPress={() => setShowDef(true)}>
+								<Text style={styles.buttonText}>Show Reading and Meaning</Text>
 							</TouchableOpacity>
-							<TouchableOpacity style={styles.button} onPress={() => { setShowDef(true); handleSrsUpdate('good'); }}>
-								<Text style={styles.buttonText}>I know</Text>
-							</TouchableOpacity>
-						</View>
+						) : (
+							<View style={styles.buttonRow}>
+								<TouchableOpacity style={styles.button} onPress={() => handleSrsUpdate('again')}>
+									<Text style={styles.buttonText}>I don&apos;t know</Text>
+								</TouchableOpacity>
+								<TouchableOpacity style={styles.button} onPress={() => handleSrsUpdate('good')}>
+									<Text style={styles.buttonText}>I know</Text>
+								</TouchableOpacity>
+							</View>
+						)}
 					</View>
 				</SafeAreaView>
 			);
@@ -234,14 +273,20 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 
 					{showDef && <Text style={styles.definition}>{item.definition}</Text>}
 
-					<View style={styles.buttonRow}>
-						<TouchableOpacity style={styles.button} onPress={() => { setShowDef(true); handleSrsUpdate('again'); }}>
-							<Text style={styles.buttonText}>I don&apos;t know</Text>
+					{!showDef ? (
+						<TouchableOpacity style={styles.button} onPress={() => setShowDef(true)}>
+							<Text style={styles.buttonText}>Show Reading and Meaning</Text>
 						</TouchableOpacity>
-						<TouchableOpacity style={styles.button} onPress={() => { setShowDef(true); handleSrsUpdate('good'); }}>
-							<Text style={styles.buttonText}>I know</Text>
-						</TouchableOpacity>
-					</View>
+					) : (
+						<View style={styles.buttonRow}>
+							<TouchableOpacity style={styles.button} onPress={() => handleSrsUpdate('again')}>
+								<Text style={styles.buttonText}>I don&apos;t know</Text>
+							</TouchableOpacity>
+							<TouchableOpacity style={styles.button} onPress={() => handleSrsUpdate('good')}>
+								<Text style={styles.buttonText}>I know</Text>
+							</TouchableOpacity>
+						</View>
+					)}
 				</View>
 			</SafeAreaView>
 		);

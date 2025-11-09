@@ -2,13 +2,13 @@ import React from 'react';
 import { Link, useRouter } from 'expo-router';
 import { Image } from 'expo-image';
 import {
-  SafeAreaView,
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { MaterialIcons } from '@expo/vector-icons';
 

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'expo-router';
 import { Image } from 'expo-image';
 import {
-  SafeAreaView,
   View,
   Text,
   StyleSheet,
@@ -11,6 +10,7 @@ import {
   TextInput,
   Button,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { getCurrentUser, AuthUser } from 'aws-amplify/auth';
 import { API, graphqlOperation } from 'aws-amplify';
 import { updateUserProgress } from '../../src/graphql/mutations';

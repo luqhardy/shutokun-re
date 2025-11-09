@@ -62,13 +62,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <MaterialCommunityIcons name="magnify-scan" size={24} color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="leaderboard"
-        options={{
-          title: 'Leaderboard',
-          tabBarIcon: ({ color }) => <MaterialIcons size={28} name="leaderboard" color={color} />,
-        }}
-      />
+      
     </Tabs>
   );
 }
