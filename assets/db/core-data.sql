@@ -231,3 +231,27 @@ INSERT INTO kanji (character, meaning, level) VALUES
 ('朕', 'majestic plural', 'N1'),
 ('鬱', 'gloom', 'N1'),
 ('璽', 'emperor''s seal', 'N1');
+
+-- More N5 vocab
+INSERT INTO vocab (term, definition, level) VALUES
+('時間', 'じかん (time)', 'N5'),
+('お金', 'おかね (money)', 'N5'),
+('今日', 'きょう (today)', 'N5'),
+('明日', 'あした (tomorrow)', 'N5'),
+('昨日', 'きのう (yesterday)', 'N5');
+
+-- More N4 vocab
+INSERT INTO vocab (term, definition, level) VALUES
+('意見', 'いけん (opinion)', 'N4'),
+('趣味', 'しゅみ (hobby)', 'N4'),
+('試合', 'しあい (match, game)', 'N4'),
+('旅行', 'りょこう (travel)', 'N4'),
+('準備', 'じゅんび (preparation)', 'N4');
+
+-- More N3 vocab
+INSERT INTO vocab (term, definition, level) VALUES
+('関係', 'かんけい (relationship)', 'N3'),
+('経験', 'けいけん (experience)', 'N3'),
+('説明', 'せつめい (explanation)', 'N3'),
+('必要', 'ひつよう (necessary)', 'N3'),
+('場合', 'ばあい (case, situation)', 'N3');

@@ -17,7 +17,9 @@ const ASSET_MODULES: Record<string, any> = {
 };
 
 // SQL script for database initialization on the web
-const DB_INIT_SCRIPT = `
+const DB_INIT_SCRIPT = `-- このファイルはダミーのコアデータです。
+-- 実際のデータ（語彙、漢字など）をここに追加してください。
+
 CREATE TABLE IF NOT EXISTS vocab (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   term TEXT NOT NULL,
@@ -46,7 +48,36 @@ INSERT INTO vocab (term, definition, level) VALUES
 ('友達', 'ともだち (friend)', 'N5'),
 ('家', 'いえ/うち (house, home)', 'N5'),
 ('車', 'くるま (car)', 'N5'),
-('駅', 'えき (station)', 'N5');
+('駅', 'えき (station)', 'N5'),
+('食べる', 'たべる (to eat)', 'N5'),
+('飲む', 'のむ (to drink)', 'N5'),
+('見る', 'みる (to see)', 'N5'),
+('聞く', 'きく (to listen)', 'N5'),
+('読む', 'よむ (to read)', 'N5'),
+('書く', 'かく (to write)', 'N5'),
+('話す', 'はなす (to speak)', 'N5'),
+('買う', 'かう (to buy)', 'N5'),
+('行く', 'いく (to go)', 'N5'),
+('帰る', 'かえる (to return)', 'N5'),
+('おいしい', 'oishii (delicious)', 'N5'),
+('たかい', 'takai (high, expensive)', 'N5'),
+('やすい', 'yasui (cheap)', 'N5'),
+('おおきい', 'ookii (big)', 'N5'),
+('ちいさい', 'chiisai (small)', 'N5'),
+('あたらしい', 'atarashii (new)', 'N5'),
+('ふるい', 'furui (old)', 'N5'),
+('いい', 'ii (good)', 'N5'),
+('わるい', 'warui (bad)', 'N5'),
+('あつい', 'atsui (hot)', 'N5'),
+('さむい', 'samui (cold)', 'N5'),
+('たのしい', 'tanoshii (fun)', 'N5'),
+('むずかしい', 'muzukashii (difficult)', 'N5'),
+('やさしい', 'yasashii (easy)', 'N5'),
+('きれい', 'kirei (beautiful, clean)', 'N5'),
+('しずか', 'shizuka (quiet)', 'N5'),
+('にぎやか', 'nigiyaka (lively)', 'N5'),
+('ゆうめい', 'yuumei (famous)', 'N5'),
+('げんき', 'genki (healthy, energetic)', 'N5');
 
 INSERT INTO kanji (character, meaning, level) VALUES
 ('一', 'one', 'N5'),
@@ -67,7 +98,36 @@ INSERT INTO kanji (character, meaning, level) VALUES
 INSERT INTO vocab (term, definition, level) VALUES
 ('変', 'へん (strange)', 'N4'),
 ('払う', 'はらう (to pay)', 'N4'),
-('続ける', 'つづける (to continue)', 'N4');
+('続ける', 'つづける (to continue)', 'N4'),
+('教える', 'おしえる (to teach)', 'N4'),
+('覚える', 'おぼえる (to remember)', 'N4'),
+('貸す', 'かす (to lend)', 'N4'),
+('借りる', 'かりる (to borrow)', 'N4'),
+('送る', 'おくる (to send)', 'N4'),
+('作る', 'つくる (to make)', 'N4'),
+('使う', 'つかう (to use)', 'N4'),
+('会う', 'あう (to meet)', 'N4'),
+('待つ', 'まつ (to wait)', 'N4'),
+('持つ', 'もつ (to hold)', 'N4'),
+('しる', 'shiru (to know)', 'N4'),
+('わかる', 'wakaru (to understand)', 'N4'),
+('おわる', 'owaru (to end)', 'N4'),
+('はじまる', 'hajimaru (to begin)', 'N4'),
+('おしえる', 'oshieru (to teach)', 'N4'),
+('ならう', 'narau (to learn)', 'N4'),
+('でる', 'deru (to leave)', 'N4'),
+('はいる', 'hairu (to enter)', 'N4'),
+('のる', 'noru (to ride)', 'N4'),
+('おりる', 'oriru (to get off)', 'N4'),
+('きる', 'kiru (to wear)', 'N4'),
+('ぬぐ', 'nugu (to take off clothes)', 'N4'),
+('あける', 'akeru (to open)', 'N4'),
+('しめる', 'shimeru (to close)', 'N4'),
+('つく', 'tsuku (to arrive)', 'N4'),
+('だす', 'dasu (to take out)', 'N4'),
+('いれる', 'ireru (to put in)', 'N4'),
+('みせる', 'miseru (to show)', 'N4'),
+('とる', 'toru (to take)', 'N4');
 
 INSERT INTO kanji (character, meaning, level) VALUES
 ('味', 'taste', 'N4'),
@@ -78,7 +138,35 @@ INSERT INTO kanji (character, meaning, level) VALUES
 INSERT INTO vocab (term, definition, level) VALUES
 ('情報', 'じょうほう (information)', 'N3'),
 ('経済', 'けいざい (economy)', 'N3'),
-('社会', 'しゃかい (society)', 'N3');
+('社会', 'しゃかい (society)', 'N3'),
+('政治', 'せいじ (politics)', 'N3'),
+('経済', 'けいざい (economy)', 'N3'),
+('法律', 'ほうりつ (law)', 'N3'),
+('国際', 'こくさい (international)', 'N3'),
+('文化', 'ぶんか (culture)', 'N3'),
+('科学', 'かがく (science)', 'N3'),
+('歴史', 'れきし (history)', 'N3'),
+('地理', 'ちり (geography)', 'N3'),
+('数学', 'すうがく (mathematics)', 'N3'),
+('物理', 'ぶつり (physics)', 'N3'),
+('化学', 'かがく (chemistry)', 'N3'),
+('生物', 'せいぶつ (biology)', 'N3'),
+('地学', 'ちがく (earth science)', 'N3'),
+('英語', 'えいご (English)', 'N3'),
+('国語', 'こくご (national language)', 'N3'),
+('体育', 'たいいく (physical education)', 'N3'),
+('音楽', 'おんがく (music)', 'N3'),
+('美術', 'びじゅつ (art)', 'N3'),
+('技術', 'ぎじゅつ (technology)', 'N3'),
+('家庭科', 'かていか (home economics)', 'N3'),
+('書道', 'しょどう (calligraphy)', 'N3'),
+('部活', 'ぶかつ (club activities)', 'N3'),
+('生徒', 'せいと (student)', 'N3'),
+('先生', 'せんせい (teacher)', 'N3'),
+('学校', 'がっこう (school)', 'N3'),
+('教室', 'きょうしつ (classroom)', 'N3'),
+('図書館', 'としょかん (library)', 'N3'),
+('体育館', 'たいいくかん (gymnasium)', 'N3');
 
 INSERT INTO kanji (character, meaning, level) VALUES
 ('指', 'finger, point', 'N3'),
@@ -89,7 +177,35 @@ INSERT INTO kanji (character, meaning, level) VALUES
 INSERT INTO vocab (term, definition, level) VALUES
 ('権利', 'けんり (right, privilege)', 'N2'),
 ('義務', 'ぎむ (duty, obligation)', 'N2'),
-('政府', 'せいふ (government)', 'N2');
+('政府', 'せいふ (government)', 'N2'),
+('企業', 'きぎょう (enterprise)', 'N2'),
+('産業', 'さんぎょう (industry)', 'N2'),
+('農業', 'のうぎょう (agriculture)', 'N2'),
+('工業', 'こうぎょう (manufacturing industry)', 'N2'),
+('商業', 'しょうぎょう (commerce)', 'N2'),
+('金融', 'きんゆう (finance)', 'N2'),
+('保険', 'ほけん (insurance)', 'N2'),
+('医療', 'いりょう (medical care)', 'N2'),
+('福祉', 'ふくし (welfare)', 'N2'),
+('環境', 'かんきょう (environment)', 'N2'),
+('教育', 'きょういく (education)', 'N2'),
+('労働', 'ろうどう (labor)', 'N2'),
+('安全', 'あんぜん (safety)', 'N2'),
+('危険', 'きけん (danger)', 'N2'),
+('健康', 'けんこう (health)', 'N2'),
+('病気', 'びょうき (illness)', 'N2'),
+('怪我', 'けが (injury)', 'N2'),
+('事故', 'じこ (accident)', 'N2'),
+('事件', 'じけん (incident)', 'N2'),
+('犯罪', 'はんざい (crime)', 'N2'),
+('法律', 'ほうりつ (law)', 'N2'),
+('裁判', 'さいばん (trial)', 'N2'),
+('警察', 'けいさつ (police)', 'N2'),
+('消防', 'しょうぼう (fire fighting)', 'N2'),
+('救急', 'きゅうきゅう (emergency)', 'N2'),
+('病院', 'びょういん (hospital)', 'N2'),
+('薬', 'くすり (medicine)', 'N2'),
+('医者', 'いしゃ (doctor)', 'N2');
 
 INSERT INTO kanji (character, meaning, level) VALUES
 ('革', 'leather', 'N2'),
@@ -100,12 +216,64 @@ INSERT INTO kanji (character, meaning, level) VALUES
 INSERT INTO vocab (term, definition, level) VALUES
 ('哲学', 'てつがく (philosophy)', 'N1'),
 ('曖昧', 'あいまい (ambiguous)', 'N1'),
-('翻訳', 'ほんやく (translation)', 'N1');
+('翻訳', 'ほんやく (translation)', 'N1'),
+('芸術', 'げいじゅつ (art)', 'N1'),
+('文学', 'ぶんがく (literature)', 'N1'),
+('音楽', 'おんがく (music)', 'N1'),
+('美術', 'びじゅつ (fine arts)', 'N1'),
+('演劇', 'えんげき (theater)', 'N1'),
+('映画', 'えいが (movie)', 'N1'),
+('写真', 'しゃしん (photograph)', 'N1'),
+('建築', 'けんちく (architecture)', 'N1'),
+('思想', 'しそう (thought)', 'N1'),
+('宗教', 'しゅうきょう (religion)', 'N1'),
+('歴史', 'れきし (history)', 'N1'),
+('地理', 'ちり (geography)', 'N1'),
+('数学', 'すうがく (mathematics)', 'N1'),
+('物理', 'ぶつり (physics)', 'N1'),
+('化学', 'かがく (chemistry)', 'N1'),
+('生物', 'せいぶつ (biology)', 'N1'),
+('地学', 'ちがく (earth science)', 'N1'),
+('医学', 'いがく (medical science)', 'N1'),
+('薬学', 'やくがく (pharmacology)', 'N1'),
+('法学', 'ほうがく (law)', 'N1'),
+('経済学', 'けいざいがく (economics)', 'N1'),
+('政治学', 'せいじがく (political science)', 'N1'),
+('社会学', 'しゃかいがく (sociology)', 'N1'),
+('心理学', 'しんりがく (psychology)', 'N1'),
+('言語学', 'げんごがく (linguistics)', 'N1'),
+('情報科学', 'じょうほうかがく (information science)', 'N1'),
+('宇宙科学', 'うちゅうかがく (space science)', 'N1'),
+('環境科学', 'かんきょうかがく (environmental science)', 'N1');
 
 INSERT INTO kanji (character, meaning, level) VALUES
 ('朕', 'majestic plural', 'N1'),
 ('鬱', 'gloom', 'N1'),
-('璽', 'emperor\'\'s seal', 'N1');
+('璽', 'emperor''s seal', 'N1');
+
+-- More N5 vocab
+INSERT INTO vocab (term, definition, level) VALUES
+('時間', 'じかん (time)', 'N5'),
+('お金', 'おかね (money)', 'N5'),
+('今日', 'きょう (today)', 'N5'),
+('明日', 'あした (tomorrow)', 'N5'),
+('昨日', 'きのう (yesterday)', 'N5');
+
+-- More N4 vocab
+INSERT INTO vocab (term, definition, level) VALUES
+('意見', 'いけん (opinion)', 'N4'),
+('趣味', 'しゅみ (hobby)', 'N4'),
+('試合', 'しあい (match, game)', 'N4'),
+('旅行', 'りょこう (travel)', 'N4'),
+('準備', 'じゅんび (preparation)', 'N4');
+
+-- More N3 vocab
+INSERT INTO vocab (term, definition, level) VALUES
+('関係', 'かんけい (relationship)', 'N3'),
+('経験', 'けいけん (experience)', 'N3'),
+('説明', 'せつめい (explanation)', 'N3'),
+('必要', 'ひつよう (necessary)', 'N3'),
+('場合', 'ばあい (case, situation)', 'N3');
 `;
 
 /**
@@ -270,6 +438,60 @@ export async function loadDbSelection(): Promise<SavedDbSelection | undefined> {
     return undefined;
   }
 }
+
+// --- Custom Vocabulary Database ---
+
+const CUSTOM_VOCAB_DB_NAME = 'custom-vocab.db';
+const CUSTOM_DB_INIT_SCRIPT = `
+CREATE TABLE IF NOT EXISTS custom_sets (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT NOT NULL,
+  created_at INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS custom_vocab (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  set_id INTEGER NOT NULL,
+  term TEXT NOT NULL,
+  definition TEXT,
+  reading TEXT,
+  FOREIGN KEY (set_id) REFERENCES custom_sets (id) ON DELETE CASCADE
+);
+`;
+
+/**
+ * Initializes and/or returns a connection to the custom vocabulary database.
+ */
+export async function getCustomVocabDb(): Promise<SQLiteDatabase> {
+  if (dbMap.has(CUSTOM_VOCAB_DB_NAME)) {
+    return dbMap.get(CUSTOM_VOCAB_DB_NAME)!;
+  }
+
+  console.log('[DB_CUSTOM] Initializing custom vocabulary database...');
+  const db = openDatabaseSync(CUSTOM_VOCAB_DB_NAME);
+  db.execSync(CUSTOM_DB_INIT_SCRIPT);
+  console.log('[DB_CUSTOM] Custom vocabulary database initialized.');
+  
+  dbMap.set(CUSTOM_VOCAB_DB_NAME, db);
+  return db;
+}
+
+/**
+ * Executes a write query (INSERT, UPDATE, DELETE) on the custom vocab database.
+ */
+export async function runCustomVocabQuery(sqlStatement: string, params: any[]): Promise<any> {
+  const db = await getCustomVocabDb();
+  return db.runSync(sqlStatement, params);
+}
+
+/**
+ * Executes a read query (SELECT) on the custom vocab database and returns all results.
+ */
+export async function getAllCustomVocabQuery<T>(sqlStatement: string, params: any[]): Promise<T[]> {
+  const db = await getCustomVocabDb();
+  return db.getAllSync<T>(sqlStatement, params);
+}
+
 
 /**
  * 単一のSELECTクエリを実行し、最初の結果を取得する。
