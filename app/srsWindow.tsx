@@ -125,9 +125,14 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 		setCurrent((prev) => (items.length ? (prev + 1) % items.length : 0));
 	};
 
-	const handleSrsUpdate = async (rating: 'again' | 'hard' | 'good' | 'easy') => {
+	const handleSrsUpdate = async (rating: 'again' | 'good') => {
 	    const item = items[current];
-	    if (!item || !user) return;
+	    if (!item) return;
+
+		if (!user) {
+			handleNext();
+			return;
+		}
 
 	    let newSrsLevel = item.srs_level;
 	    let points = 0;
@@ -135,16 +140,8 @@ const srsIntervals = [0, 4 * 3600, 8 * 3600, 24 * 3600, 3 * 24 * 3600, 7 * 24 * 
 	        case 'again':
 	            newSrsLevel = 0;
 	            break;
-	        case 'hard':
-	            newSrsLevel = Math.max(0, newSrsLevel - 1);
-	            points = 1;
-	            break;
 	        case 'good':
 	            newSrsLevel++;
-	            points = 10;
-	            break;
-	        case 'easy':
-	            newSrsLevel += 2; // Jump two steps
 	            points = 10;
 	            break;
 	    }
