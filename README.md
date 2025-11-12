@@ -1,4 +1,4 @@
-# Shutokun-re (首都圏-RE)
+# Shutokun-re
 
 Shutokun-re is a comprehensive mobile application designed for Japanese language learners. It provides tools for studying vocabulary, practicing Kana, and analyzing sentences. The app features a "Custom Mode" that allows users to generate their own study sets from text files, PDFs, or by scanning physical documents with OCR.
 
