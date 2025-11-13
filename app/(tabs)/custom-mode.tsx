@@ -16,7 +16,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import kuromoji from 'kuromoji';
+import * as kuromoji from '@charlescoeder/react-native-kuromoji';
 import { runCustomVocabQuery, getAllCustomVocabQuery } from '@/db/database';
 import { useFocusEffect } from 'expo-router';
 
@@ -24,7 +24,7 @@ import { useFocusEffect } from 'expo-router';
 // Replace this with the IP address of your extraction server.
 // For local development with an emulator, '127.0.0.1' or 'localhost' should work.
 // If running on a physical device, use your computer's local network IP address.
-const SERVER_IP = '127.0.0.1';
+const SERVER_IP = '192.168.11.32';
 const PDF_EXTRACTOR_URL = `http://${SERVER_IP}:5000/extract`;
 const OCR_EXTRACTOR_URL = `http://${SERVER_IP}:5000/ocr`;
 
