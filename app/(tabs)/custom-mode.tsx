@@ -16,7 +16,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import * as kuromoji from '@charlescoeder/react-native-kuromoji';
+import { builder as kuromojiBuilder, Tokenizer, IpadicFeatures } from '@sglkc/kuromoji';
+import { Asset } from 'expo-asset';
 import { runCustomVocabQuery, getAllCustomVocabQuery } from '@/db/database';
 import { useFocusEffect } from 'expo-router';
 
@@ -27,8 +28,6 @@ import { useFocusEffect } from 'expo-router';
 const SERVER_IP = '192.168.11.32';
 const PDF_EXTRACTOR_URL = `http://${SERVER_IP}:5000/extract`;
 const OCR_EXTRACTOR_URL = `http://${SERVER_IP}:5000/ocr`;
-
-const KUROMOJI_DICT_PATH = 'https://cdn.jsdelivr.net/npm/kuromoji@0.1.2/dict/';
 
 interface CustomSet {
   id: number;
@@ -44,25 +43,36 @@ interface VocabWithDefinition {
 
 const CustomModeScreen: React.FC = () => {
   const router = useRouter();
-  const [tokenizer, setTokenizer] = useState<kuromoji.Tokenizer<kuromoji.IpadicFeatures> | null>(null);
+  const [tokenizer, setTokenizer] = useState<Tokenizer<IpadicFeatures> | null>(null);
   const [isTokenizerReady, setIsTokenizerReady] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [processingStatus, setProcessingStatus] = useState('Initializing language tools...');
   const [customSets, setCustomSets] = useState<CustomSet[]>([]);
 
   useEffect(() => {
-    if (tokenizer || isTokenizerReady) return;
-    console.log('Initializing tokenizer...');
-    kuromoji.builder({ dicPath: KUROMOJI_DICT_PATH }).build((err, builtTokenizer) => {
-      if (err) {
+    const initializeTokenizer = async () => {
+      if (tokenizer || isTokenizerReady) return;
+      console.log('Initializing tokenizer...');
+      try {
+        // Use expo-asset to get a URI for a bundled dictionary file
+        const dictAsset = Asset.fromModule(require('../../assets/kuromoji-dict/base.dat.gz'));
+        await dictAsset.downloadAsync(); // Ensure the asset is available
+        
+        const dictUri = dictAsset.localUri || dictAsset.uri;
+        // The builder needs the path to the directory, so we strip the filename
+        const dictPath = dictUri.substring(0, dictUri.lastIndexOf('/') + 1);
+
+        const builtTokenizer = await kuromojiBuilder({ dicPath: dictPath }).build();
+        console.log('Tokenizer built successfully.');
+        setTokenizer(builtTokenizer);
+        setIsTokenizerReady(true);
+      } catch (err) {
         console.error('Error building tokenizer:', err);
         Alert.alert('Error', 'Failed to load Japanese language tools.');
-        return;
       }
-      console.log('Tokenizer built successfully.');
-      setTokenizer(builtTokenizer);
-      setIsTokenizerReady(true);
-    });
+    };
+
+    initializeTokenizer();
   }, []);
 
   const fetchCustomSets = async () => {

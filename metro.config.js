@@ -3,7 +3,7 @@ const { getDefaultConfig } = require('expo/metro-config');
 const config = getDefaultConfig(__dirname);
 
 // Add wasm asset support.
-config.resolver.assetExts.push('wasm');
+config.resolver.assetExts.push('wasm', 'dat', 'gz');
 
 // Add COEP and COOP headers to support SharedArrayBuffer.
 config.server.enhanceMiddleware = (middleware) => {
