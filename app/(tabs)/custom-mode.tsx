@@ -55,7 +55,7 @@ const CustomModeScreen: React.FC = () => {
       console.log('Initializing tokenizer...');
       try {
         // Use expo-asset to get a URI for a bundled dictionary file
-        const dictAsset = Asset.fromModule(require('../../assets/kuromoji-dict/base.dat.gz'));
+        const dictAsset = Asset.fromModule(require('/assets/kuromoji-dict/base.dat.gz'));
         await dictAsset.downloadAsync(); // Ensure the asset is available
         
         const dictUri = dictAsset.localUri || dictAsset.uri;
